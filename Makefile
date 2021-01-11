@@ -5,7 +5,7 @@ exec:
 clean:
 	./scripts/clean.sh
 run:
-	docker run --rm -dit --name nrece -p 80:80 nrece:v1
+	docker run --rm -dit --name nrece -p 80:80 nrece:1.0.0
 stop:
 	docker stop nrece
 
