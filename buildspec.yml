@@ -12,6 +12,6 @@ phases:
     - docker push $IMAGE
   post_build:
     commands:
-    - printf '[{"name":"${var.system_name}","imageUri":"%s"}]' $IMAGE > imagedefinitions.json
+    - printf '[{"name":"nrece","imageUri":"%s"}]' $IMAGE > imagedefinitions.json
 artifacts:
   files: imagedefinitions.json
