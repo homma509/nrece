@@ -20,13 +20,20 @@ type DB struct {
 
 // SQLHandler ... SQL handler struct
 type SQLHandler struct {
-	Conn *gorm.DB
+	conn *gorm.DB
 }
 
 // NewSQLHandler ...
 func NewSQLHandler() *SQLHandler {
-	c := config.NewMySQLDB()
+	sqlHandler := &SQLHandler{}
+	if err := sqlHandler.open(); err != nil {
+		fmt.Fprintf(os.Stderr, "%s", err.Error())
+	}
+	return sqlHandler
+}
 
+func (sqlHandler *SQLHandler) open() error {
+	c := config.NewMySQLDB()
 	PROTOCOL := c.MySQL.Protocol
 	USER := c.MySQL.Username
 	PASS := c.MySQL.Password
@@ -35,17 +42,18 @@ func NewSQLHandler() *SQLHandler {
 	dsn := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?parseTime=true&loc=Asia%2FTokyo"
 	conn, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err.Error())
-		// panic(err.Error())
-		return nil
+		return err
 	}
-	sqlHandler := new(SQLHandler)
-	sqlHandler.Conn = conn
-
-	return sqlHandler
+	sqlHandler.conn = conn
+	return nil
 }
 
 // Where ...
 func (sqlHandler *SQLHandler) Where(out interface{}, query interface{}, args ...interface{}) error {
-	return sqlHandler.Conn.Where(query, args).Find(out).Error
+	if sqlHandler.conn == nil {
+		if err := sqlHandler.open(); err != nil {
+			return err
+		}
+	}
+	return sqlHandler.conn.Where(query, args).Find(out).Error
 }
