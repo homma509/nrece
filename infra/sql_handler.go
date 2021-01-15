@@ -25,7 +25,7 @@ type SQLHandler struct {
 
 // NewSQLHandler ...
 func NewSQLHandler() *SQLHandler {
-	c := config.NewDB()
+	c := config.NewMySQLDB()
 
 	PROTOCOL := c.MySQL.Protocol
 	USER := c.MySQL.Username
@@ -37,6 +37,7 @@ func NewSQLHandler() *SQLHandler {
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s", err.Error())
 		// panic(err.Error())
+		return nil
 	}
 	sqlHandler := new(SQLHandler)
 	sqlHandler.Conn = conn

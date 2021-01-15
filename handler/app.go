@@ -1,10 +1,17 @@
 package handler
 
 import (
+	"fmt"
+
 	"github.com/homma509/9go/infra"
 	"github.com/homma509/9go/usecase"
 	"github.com/labstack/echo"
 )
+
+type apiError struct {
+	Code    int
+	Message string
+}
 
 // AppHandler ...
 type AppHandler struct {
@@ -42,7 +49,12 @@ func (handler *AppHandler) GetApp() echo.HandlerFunc {
 
 		resJSON, err := handler.Get(id)
 		if err != nil {
-			return err
+			return c.JSON(503,
+				apiError{
+					Code:    503,
+					Message: fmt.Sprintf("AppHandler failed to GetApp %v", err),
+				},
+			)
 			// return utils.GetErrorMassage(c, "en", err)
 		}
 

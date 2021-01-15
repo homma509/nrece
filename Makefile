@@ -1,5 +1,5 @@
 build:
-	docker image build -t nrece:v1 .
+	docker image build -t nrece:1.0.0 .
 exec:
 	docker exec -it nrece /bin/sh
 clean:

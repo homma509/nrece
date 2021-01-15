@@ -10,8 +10,8 @@ type DB struct {
 	}
 }
 
-// NewDB ...
-func NewDB() *DB {
+// NewMySQLDB ...
+func NewMySQLDB() *DB {
 	config := new(DB)
 	envs := NewEnvs()
 

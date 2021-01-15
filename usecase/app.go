@@ -7,7 +7,7 @@ import (
 
 // App ...
 type App struct {
-	repository.AppRepository
+	repo repository.AppRepository
 }
 
 // NewApp ...
@@ -19,7 +19,7 @@ func NewApp(repo repository.AppRepository) *App {
 
 // Get ...
 func (a *App) Get(id string) (*model.App, error) {
-	res, err := a.Get(id)
+	res, err := a.repo.Get(id)
 	if err != nil {
 		return nil, err
 	}
