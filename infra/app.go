@@ -19,7 +19,7 @@ func NewAppRepository(sqlHandler *SQLHandler) *AppRepository {
 }
 
 // Get ...
-func (r *AppRepository) Get(id string) (app *model.App, err error) {
+func (r *AppRepository) Get(id string) (app model.App, err error) {
 	if r.sql == nil {
 		err = fmt.Errorf("SQL Handler is nil")
 		return

@@ -18,10 +18,7 @@ func NewApp(repo repository.AppRepository) *App {
 }
 
 // Get ...
-func (a *App) Get(id string) (*model.App, error) {
-	res, err := a.repo.Get(id)
-	if err != nil {
-		return nil, err
-	}
-	return res, nil
+func (a *App) Get(id string) (app model.App, err error) {
+	app, err = a.repo.Get(id)
+	return
 }

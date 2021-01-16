@@ -6,5 +6,5 @@ import (
 
 // AppRepository ...
 type AppRepository interface {
-	Get(id string) (*model.App, error)
+	Get(id string) (model.App, error)
 }
