@@ -13,6 +13,6 @@ RUN mkdir /app \
     && apk add --no-cache tzdata \
     && cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 WORKDIR /app
-COPY --from=build-env /app/build/9rece /app/
+COPY --from=build-env /app/build/nrece /app/
 EXPOSE 80
-ENTRYPOINT ["/app/9rece"]
+ENTRYPOINT ["/app/nrece"]

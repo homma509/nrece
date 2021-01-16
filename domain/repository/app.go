@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"github.com/homma509/9go/domain/model"
+	"github.com/homma509/nrece/domain/model"
 )
 
 // AppRepository ...

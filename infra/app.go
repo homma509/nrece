@@ -3,7 +3,7 @@ package infra
 import (
 	"fmt"
 
-	"github.com/homma509/9go/domain/model"
+	"github.com/homma509/nrece/domain/model"
 )
 
 // AppRepository ...

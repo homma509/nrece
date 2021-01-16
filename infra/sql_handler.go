@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/homma509/9go/config"
+	"github.com/homma509/nrece/config"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )

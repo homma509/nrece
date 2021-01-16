@@ -1,8 +1,8 @@
 package usecase
 
 import (
-	"github.com/homma509/9go/domain/model"
-	"github.com/homma509/9go/domain/repository"
+	"github.com/homma509/nrece/domain/model"
+	"github.com/homma509/nrece/domain/repository"
 )
 
 // App ...

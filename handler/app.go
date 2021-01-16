@@ -3,8 +3,8 @@ package handler
 import (
 	"fmt"
 
-	"github.com/homma509/9go/infra"
-	"github.com/homma509/9go/usecase"
+	"github.com/homma509/nrece/infra"
+	"github.com/homma509/nrece/usecase"
 	"github.com/labstack/echo"
 )
 
