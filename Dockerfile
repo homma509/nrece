@@ -16,3 +16,4 @@ WORKDIR /app
 COPY --from=build-env /app/build/nrece /app/
 EXPOSE 80
 ENTRYPOINT ["/app/nrece"]
+CMD ["server"]

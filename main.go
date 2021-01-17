@@ -16,6 +16,9 @@ func main() {
 		"server": func() (cli.Command, error) {
 			return &command.ServerCommand{}, nil
 		},
+		"batch": func() (cli.Command, error) {
+			return &command.BatchCommand{}, nil
+		},
 	}
 
 	exitCode, err := c.Run()
