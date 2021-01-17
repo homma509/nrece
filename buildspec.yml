@@ -5,7 +5,7 @@ phases:
     commands:
     - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
     - REPO=$(aws ecr describe-repositories --repository-names nrece --output text --query "repositories[0].repositoryUri")
-    - IMAGE=$REPO:1.0.0
+    - IMAGE=$REPO:latest
   build:
     commands:
     - docker build -t $IMAGE .
