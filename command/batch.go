@@ -28,6 +28,6 @@ Usage: nrece batch
 // Run Batchコマンド処理の実行
 func (c *BatchCommand) Run(args []string) int {
 	// TODO SIGTERM
-	fmt.Fprintln(os.Stdout, "run a batch!!!")
+	fmt.Fprintln(os.Stdout, "run a batch?!")
 	return 0
 }
