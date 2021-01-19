@@ -9,7 +9,7 @@ phases:
     commands:
     - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
     - REPOSITORY_URI=${ECR_URI}
-    - IMAGE_TAG=${CODEBUILD_RESOULVED_SOURCE_VERSION}
+    - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
     - IMAGE=$REPOSITORY_URI:$IMAGE_TAG
     # - REPO=$(aws ecr describe-repositories --repository-names nrece --output text --query "repositories[0].repositoryUri")
     # - IMAGE=$REPO:1.0.0
