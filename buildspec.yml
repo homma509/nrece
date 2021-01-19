@@ -1,11 +1,18 @@
 version: 0.2
 
+env:
+  variables:
+    DOCKER_BUILDKIT: "1"
+
 phases:
   pre_build:
     commands:
-    - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-    - REPO=$(aws ecr describe-repositories --repository-names nrece --output text --query "repositories[0].repositoryUri")
-    - IMAGE=$REPO:latest
+    # - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+    # - REPO=$(aws ecr describe-repositories --repository-names nrece --output text --query "repositories[0].repositoryUri")
+    # - IMAGE=$REPO:1.0.0
+    REPOSITORY_URI=${ECR_URI}
+    IMAGE_TAG=${CODEBUILD_RESOULVED_SOURCE_VERSION}
+    IMAGE=$REPOSITORY_URI:$IMAGE_TAG
   build:
     commands:
     - docker build -t $IMAGE .
