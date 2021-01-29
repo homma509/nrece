@@ -3,7 +3,7 @@ package handler
 import (
 	"fmt"
 
-	"github.com/homma509/nrece/infra"
+	"github.com/homma509/nrece/domain/repository"
 	"github.com/homma509/nrece/usecase"
 	"github.com/labstack/echo"
 )
@@ -19,14 +19,10 @@ type AppHandler struct {
 }
 
 // NewAppHandler ...
-func NewAppHandler() *AppHandler {
+func NewAppHandler(repo repository.AppRepository) (*AppHandler, error) {
 	return &AppHandler{
-		usecase.NewApp(
-			infra.NewAppRepository(
-				infra.NewSQLHandler(),
-			),
-		),
-	}
+		usecase.NewApp(repo),
+	}, nil
 }
 
 // GetApp ...

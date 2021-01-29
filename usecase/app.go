@@ -1,6 +1,8 @@
 package usecase
 
 import (
+	"log"
+
 	"github.com/homma509/nrece/domain/model"
 	"github.com/homma509/nrece/domain/repository"
 )
@@ -19,6 +21,7 @@ func NewApp(repo repository.AppRepository) *App {
 
 // Get ...
 func (a *App) Get(id string) (app model.App, err error) {
+	log.Println("[info] usecase app get", id)
 	app, err = a.repo.Get(id)
 	return
 }

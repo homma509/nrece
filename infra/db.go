@@ -1,8 +1,7 @@
 package infra
 
 import (
-	"fmt"
-	"os"
+	"log"
 
 	"github.com/homma509/nrece/config"
 	"gorm.io/driver/mysql"
@@ -24,12 +23,14 @@ type SQLHandler struct {
 }
 
 // NewSQLHandler ...
-func NewSQLHandler() *SQLHandler {
+func NewSQLHandler() (*SQLHandler, error) {
+	log.Println("[info] infra db new")
 	sqlHandler := &SQLHandler{}
-	if err := sqlHandler.open(); err != nil {
-		fmt.Fprintf(os.Stderr, "%s", err.Error())
+	err := sqlHandler.open()
+	if err != nil {
+		return nil, err
 	}
-	return sqlHandler
+	return sqlHandler, nil
 }
 
 func (sqlHandler *SQLHandler) open() error {
@@ -38,6 +39,7 @@ func (sqlHandler *SQLHandler) open() error {
 	USER := c.MySQL.Username
 	PASS := c.MySQL.Password
 	DBNAME := c.MySQL.DBName
+	log.Println("[info] infra db open", c)
 
 	dsn := USER + ":" + PASS + "@" + PROTOCOL + "/" + DBNAME + "?parseTime=true&loc=Asia%2FTokyo"
 	conn, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
@@ -50,6 +52,7 @@ func (sqlHandler *SQLHandler) open() error {
 
 // Where ...
 func (sqlHandler *SQLHandler) Where(out interface{}, query interface{}, args ...interface{}) error {
+	log.Println("[info] infra db where", out, query, args)
 	if sqlHandler.conn == nil {
 		if err := sqlHandler.open(); err != nil {
 			return err

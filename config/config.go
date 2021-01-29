@@ -1,5 +1,7 @@
 package config
 
+import "github.com/aws/aws-sdk-go/aws"
+
 // DB ...
 type DB struct {
 	MySQL struct {
@@ -21,4 +23,12 @@ func NewMySQLDB() *DB {
 	config.MySQL.DBName = envs.DBName()
 
 	return config
+}
+
+// NewAWSConfig ...
+func NewAWSConfig() *aws.Config {
+	envs := NewEnvs()
+	return &aws.Config{
+		Region: aws.String(envs.Region()),
+	}
 }

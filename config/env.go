@@ -28,6 +28,11 @@ func (e *Envs) env(key string) string {
 	return os.Getenv(key)
 }
 
+// Region ...
+func (e *Envs) Region() string {
+	return e.env("REGION")
+}
+
 // DBHost ...
 func (e *Envs) DBHost() string {
 	return e.env("DB_HOST")

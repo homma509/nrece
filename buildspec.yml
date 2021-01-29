@@ -11,8 +11,6 @@ phases:
     - REPOSITORY_URI=${ECR_URI}
     - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
     - IMAGE=$REPOSITORY_URI:$IMAGE_TAG
-    # - REPO=$(aws ecr describe-repositories --repository-names nrece --output text --query "repositories[0].repositoryUri")
-    # - IMAGE=$REPO:1.0.0
   build:
     commands:
     - docker build -t $IMAGE .
