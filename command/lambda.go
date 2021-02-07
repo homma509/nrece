@@ -44,10 +44,10 @@ func (c *LambdaCommand) Run(args []string) int {
 		return 1
 	}
 	for _, s3url := range args {
-		log.Println("[info] command move file", s3url)
-		err = fileHandler.MoveFile(context.Background(), s3url)
+		log.Println("[info] command copy file", s3url)
+		err = fileHandler.CopyFile(context.Background(), s3url)
 		if err != nil {
-			log.Println("[error] command move file", s3url, err)
+			log.Println("[error] command copy file", s3url, err)
 			return 1
 		}
 	}

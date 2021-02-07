@@ -1,25 +1,23 @@
 package config
 
-import "os"
+import (
+	"os"
+)
 
 var envs *Envs
 
 // Envs 環境変数を表した構造体
-type Envs struct {
-	Cache map[string]string
-}
+type Envs struct{}
 
 // NewEnvs ...
-func NewEnvs() *Envs {
-	return &Envs{
-		Cache: map[string]string{},
-	}
+func newEnvs() *Envs {
+	return &Envs{}
 }
 
 // Env ...
 func Env() *Envs {
 	if envs == nil {
-		envs = NewEnvs()
+		envs = newEnvs()
 	}
 	return envs
 }
@@ -51,4 +49,14 @@ func (e *Envs) DBPassword() string {
 // DBName ...
 func (e *Envs) DBName() string {
 	return e.env("DB_NAME")
+}
+
+// BucketName ...
+func (e *Envs) BucketName() string {
+	return e.env("BUCKET_NAME")
+}
+
+// BucketFolderName ...
+func (e *Envs) BucketFolderName() string {
+	return e.env("BUCKET_FOLDER_NAME")
 }

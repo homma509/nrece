@@ -28,34 +28,33 @@ func main() {
 	os.Exit(exitCode)
 }
 
-func lambdaHandler() func(context.Context, events.S3Event) error {
-	return func(ctx context.Context, event events.S3Event) error {
-		for _, record := range event.Records {
-			u := url.URL{
-				Scheme: "s3",
-				Host:   record.S3.Bucket.Name,
-				Path:   record.S3.Object.Key,
-			}
-			log.Println("[info] main lambda handler", u.String())
-
-			s3Repo, err := infra.NewS3Repository()
-			if err != nil {
-				log.Println("[error] main new s3 hander", err)
-				return err
-			}
-			fileHandler, err := handler.NewFileHandler(s3Repo)
-			if err != nil {
-				log.Println("[error] main new file handler", err)
-				return err
-			}
-			err = fileHandler.MoveFile(ctx, u.String())
-			if err != nil {
-				log.Println("[error] main move file", u.String(), err)
-				return err
-			}
+func lambdaHandler(ctx context.Context, evt events.S3Event) error {
+	for _, record := range evt.Records {
+		log.Printf("[info] s3 event %#v", record.S3)
+		u := url.URL{
+			Scheme: "s3",
+			Host:   record.S3.Bucket.Name,
+			Path:   record.S3.Object.Key,
 		}
-		return nil
+		log.Println("[info] main lambda handler", u.String())
+
+		s3Repo, err := infra.NewS3Repository()
+		if err != nil {
+			log.Println("[error] main new s3 hander", err)
+			return err
+		}
+		fileHandler, err := handler.NewFileHandler(s3Repo)
+		if err != nil {
+			log.Println("[error] main new file handler", err)
+			return err
+		}
+		err = fileHandler.CopyFile(ctx, u.String())
+		if err != nil {
+			log.Println("[error] main copy file", err)
+			return err
+		}
 	}
+	return nil
 }
 
 func cmd() (int, error) {

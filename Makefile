@@ -1,3 +1,5 @@
+.PHONY: build exec clean run stop go-lint
+
 build:
 	docker image build -t nrece:1.0.0 .
 exec:

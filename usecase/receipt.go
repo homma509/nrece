@@ -10,6 +10,7 @@ import (
 	"net/url"
 	"strconv"
 
+	"github.com/homma509/nrece/config"
 	"github.com/homma509/nrece/domain/model"
 	"github.com/homma509/nrece/domain/repository"
 	"golang.org/x/text/encoding/japanese"
@@ -18,14 +19,14 @@ import (
 
 // // ReceiptUsecase レセプトユースケースのインターフェース
 // type ReceiptUsecase interface {
-// 	Move(ctx context.Context, s3url string) error
+// 	Copy(ctx context.Context, s3url string) error
 // 	Store(ctx context.Context, s3url string) error
 // }
 
 // // ReceiptFile レセプトファイルのインターフェース
 // type ReceiptFile interface {
 // 	GetObject(bucket, key string) (io.ReadCloser, error)
-// 	MoveObject(srcBucket, srcKey, dstBucket, dstKey string) error
+// 	CopyObject(srcBucket, srcKey, dstBucket, dstKey string) error
 // }
 
 // Receipt ...
@@ -40,15 +41,15 @@ func NewReceipt(repo repository.ReceiptRepository) *Receipt {
 	}
 }
 
-// Move レセプトファイルの移動
-func (r *Receipt) Move(ctx context.Context, fromurl string) error {
-	log.Println("[info] usecase receipt move", fromurl)
+// Copy レセプトファイルの移動
+func (r *Receipt) Copy(ctx context.Context, fromurl string) error {
+	log.Println("[info] usecase receipt copy", fromurl)
 	tourl, err := r.toURL(ctx, fromurl)
 	if err != nil {
 		return err
 	}
 
-	return r.repo.Move(ctx, fromurl, tourl)
+	return r.repo.Copy(ctx, fromurl, tourl)
 }
 
 func (r *Receipt) toURL(ctx context.Context, fromurl string) (string, error) {
@@ -66,10 +67,9 @@ func (r *Receipt) toURL(ctx context.Context, fromurl string) (string, error) {
 
 	u := url.URL{
 		Scheme: "s3",
-		Host: fmt.Sprintf("receipts/%s",
-			ir.FacilityID,
-		),
-		Path: fmt.Sprintf("%s_%s_%s.UKE",
+		Host:   config.Env().BucketName(),
+		Path: fmt.Sprintf("%s/%s/%s_%s.UKE",
+			config.Env().BucketFolderName(),
 			ir.FacilityID,
 			ir.FacilityName,
 			ir.InvoiceYM,
@@ -97,7 +97,7 @@ func readIR(f io.ReadCloser) (*model.IR, error) {
 }
 
 func ir(record []string) (*model.IR, error) {
-	log.Print("[info] usecase receipt ir", record)
+	log.Println("[info] usecase receipt ir", record)
 	if record[0] != model.IRRecordType {
 		return nil, fmt.Errorf("ir RecordType invalid value %s", record[0])
 	}

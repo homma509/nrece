@@ -15,20 +15,18 @@ type DB struct {
 // NewMySQLDB ...
 func NewMySQLDB() *DB {
 	config := new(DB)
-	envs := NewEnvs()
 
-	config.MySQL.Protocol = "tcp(" + envs.DBHost() + ":3306)"
-	config.MySQL.Username = envs.DBUserName()
-	config.MySQL.Password = envs.DBPassword()
-	config.MySQL.DBName = envs.DBName()
+	config.MySQL.Protocol = "tcp(" + Env().DBHost() + ":3306)"
+	config.MySQL.Username = Env().DBUserName()
+	config.MySQL.Password = Env().DBPassword()
+	config.MySQL.DBName = Env().DBName()
 
 	return config
 }
 
 // NewAWSConfig ...
 func NewAWSConfig() *aws.Config {
-	envs := NewEnvs()
 	return &aws.Config{
-		Region: aws.String(envs.Region()),
+		Region: aws.String(Env().Region()),
 	}
 }
