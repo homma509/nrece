@@ -1,6 +1,8 @@
 package config
 
-import "github.com/aws/aws-sdk-go/aws"
+import (
+	"github.com/aws/aws-sdk-go/aws"
+)
 
 // DB ...
 type DB struct {

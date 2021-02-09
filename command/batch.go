@@ -1,8 +1,7 @@
 package command
 
 import (
-	"fmt"
-	"os"
+	"log"
 	"strings"
 )
 
@@ -28,6 +27,7 @@ Usage: nrece batch
 // Run コマンド処理の実行
 func (c *BatchCommand) Run(args []string) int {
 	// TODO SIGTERM
-	fmt.Fprintln(os.Stdout, "run a batch?!")
+	log.Println("[info] batch run")
+	log.Println("[info] batch args", args)
 	return 0
 }
