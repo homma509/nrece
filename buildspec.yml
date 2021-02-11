@@ -14,8 +14,8 @@ phases:
     - IMAGE=$REPOSITORY_URI:latest
   build:
     commands:
-    - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
-    - docker push $REPOSITORY_URI:$IMAGE_TAG
+    - docker build -t $IMAGE .
+    - docker push $IMAGE
   post_build:
     commands:
     - printf '[{"name":"nrece","imageUri":"%s"}]' $IMAGE > imagedefinitions.json
