@@ -1,7 +1,9 @@
 package command
 
 import (
+	"fmt"
 	"log"
+	"os"
 	"strings"
 )
 
@@ -29,5 +31,10 @@ func (c *BatchCommand) Run(args []string) int {
 	// TODO SIGTERM
 	log.Println("[info] batch run")
 	log.Println("[info] batch args", args)
+
+	for _, pair := range os.Environ() {
+		fmt.Println(pair)
+	}
+
 	return 0
 }
