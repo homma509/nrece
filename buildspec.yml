@@ -9,13 +9,13 @@ phases:
     commands:
     - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
     - REPOSITORY_URI=${ECR_URI}
-    - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+    # - IMAGE_TAG=${CODEBUILD_RESOLVED_SOURCE_VERSION}
+    # - IMAGE=$REPOSITORY_URI:$IMAGE_TAG
+    - IMAGE=$REPOSITORY_URI:latest
   build:
     commands:
     - docker build -t $REPOSITORY_URI:$IMAGE_TAG .
-    - docker build -t $REPOSITORY_URI:latest .
     - docker push $REPOSITORY_URI:$IMAGE_TAG
-    - docker push $REPOSITORY_URI:latest
   post_build:
     commands:
     - printf '[{"name":"nrece","imageUri":"%s"}]' $IMAGE > imagedefinitions.json
