@@ -29,6 +29,7 @@ func main() {
 }
 
 func lambdaHandler(ctx context.Context, evt events.S3Event) error {
+	log.Printf("[info] s3 events %#v", evt)
 	for _, record := range evt.Records {
 		log.Printf("[info] s3 event %#v", record.S3)
 		u := url.URL{

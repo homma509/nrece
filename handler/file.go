@@ -20,8 +20,8 @@ func NewFileHandler(repo repository.ReceiptRepository) (*FileHandler, error) {
 }
 
 // CopyFile ...
-func (h *FileHandler) CopyFile(ctx context.Context, s3url string) error {
-	if err := h.u.Copy(ctx, s3url); err != nil {
+func (h *FileHandler) CopyFile(ctx context.Context, s3URL string) error {
+	if err := h.u.Copy(ctx, s3URL); err != nil {
 		return err
 	}
 	return nil

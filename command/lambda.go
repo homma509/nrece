@@ -43,11 +43,11 @@ func (c *LambdaCommand) Run(args []string) int {
 		log.Println("[error] command run", err)
 		return 1
 	}
-	for _, s3url := range args {
-		log.Println("[info] command copy file", s3url)
-		err = fileHandler.CopyFile(context.Background(), s3url)
+	for _, s3URL := range args {
+		log.Println("[info] command copy file", s3URL)
+		err = fileHandler.CopyFile(context.Background(), s3URL)
 		if err != nil {
-			log.Println("[error] command copy file", s3url, err)
+			log.Println("[error] command copy file", s3URL, err)
 			return 1
 		}
 	}

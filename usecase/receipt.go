@@ -19,8 +19,8 @@ import (
 
 // // ReceiptUsecase レセプトユースケースのインターフェース
 // type ReceiptUsecase interface {
-// 	Copy(ctx context.Context, s3url string) error
-// 	Store(ctx context.Context, s3url string) error
+// 	Copy(ctx context.Context, s3URL string) error
+// 	Store(ctx context.Context, s3URL string) error
 // }
 
 // // ReceiptFile レセプトファイルのインターフェース

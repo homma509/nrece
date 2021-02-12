@@ -46,9 +46,9 @@ func (h *S3Repository) open() error {
 }
 
 // Get ...
-func (h *S3Repository) Get(ctx context.Context, s3url string) (io.ReadCloser, error) {
-	log.Println("[info] infra s3 Get", s3url)
-	u, err := toURL(s3url)
+func (h *S3Repository) Get(ctx context.Context, s3URL string) (io.ReadCloser, error) {
+	log.Println("[info] infra s3 Get", s3URL)
+	u, err := toURL(s3URL)
 	if err != nil {
 		return nil, err
 	}
@@ -64,9 +64,9 @@ func (h *S3Repository) Get(ctx context.Context, s3url string) (io.ReadCloser, er
 	return out.Body, nil
 }
 
-func toURL(s3url string) (*url.URL, error) {
-	log.Println("[info] infra s3 toURL", s3url)
-	u, err := url.Parse(s3url)
+func toURL(s3URL string) (*url.URL, error) {
+	log.Println("[info] infra s3 toURL", s3URL)
+	u, err := url.Parse(s3URL)
 	if err != nil {
 		return nil, err
 	}
