@@ -46,9 +46,9 @@ func (h *S3Repository) open() error {
 }
 
 // Get ...
-func (h *S3Repository) Get(ctx context.Context, s3URL string) (io.ReadCloser, error) {
-	log.Println("[info] infra s3 Get", s3URL)
-	u, err := toURL(s3URL)
+func (h *S3Repository) Get(ctx context.Context, s3url string) (io.ReadCloser, error) {
+	log.Println("[info] infra s3 Get", s3url)
+	u, err := toURL(s3url)
 	if err != nil {
 		return nil, err
 	}
@@ -64,9 +64,9 @@ func (h *S3Repository) Get(ctx context.Context, s3URL string) (io.ReadCloser, er
 	return out.Body, nil
 }
 
-func toURL(s3URL string) (*url.URL, error) {
-	log.Println("[info] infra s3 toURL", s3URL)
-	u, err := url.Parse(s3URL)
+func toURL(s3url string) (*url.URL, error) {
+	log.Println("[info] infra s3 toURL", s3url)
+	u, err := url.Parse(s3url)
 	if err != nil {
 		return nil, err
 	}
@@ -77,21 +77,21 @@ func toURL(s3URL string) (*url.URL, error) {
 }
 
 // Copy ...
-func (h *S3Repository) Copy(ctx context.Context, src, dest string) error {
-	log.Printf("[info] infra s3 copy %s to %s", src, dest)
-	srcURL, err := url.Parse(src)
+func (h *S3Repository) Copy(ctx context.Context, dst, src string) error {
+	log.Printf("[info] infra s3 copy %s from %s", dst, src)
+	dstURL, err := url.Parse(dst)
 	if err != nil {
 		return err
 	}
-	destURL, err := url.Parse(dest)
+	srcURL, err := url.Parse(src)
 	if err != nil {
 		return err
 	}
 
 	in := &s3.CopyObjectInput{
 		CopySource: aws.String(fmt.Sprintf("%s%s", srcURL.Host, srcURL.Path)),
-		Bucket:     aws.String(destURL.Host),
-		Key:        aws.String(strings.TrimPrefix(destURL.Path, "/")),
+		Bucket:     aws.String(dstURL.Host),
+		Key:        aws.String(strings.TrimPrefix(dstURL.Path, "/")),
 	}
 	log.Println("[info] infra s3 copy", in)
 

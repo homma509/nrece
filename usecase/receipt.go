@@ -41,20 +41,20 @@ func NewReceipt(repo repository.ReceiptRepository) *Receipt {
 	}
 }
 
-// Copy レセプトファイルの移動
-func (r *Receipt) Copy(ctx context.Context, fromurl string) error {
-	log.Println("[info] usecase receipt copy", fromurl)
-	tourl, err := r.toURL(ctx, fromurl)
+// Copy レセプトファイルのコピー
+func (r *Receipt) Copy(ctx context.Context, src string) error {
+	log.Println("[info] usecase receipt copy", src)
+	dst, err := r.copyDst(ctx, src)
 	if err != nil {
 		return err
 	}
 
-	return r.repo.Copy(ctx, fromurl, tourl)
+	return r.repo.Copy(ctx, dst, src)
 }
 
-func (r *Receipt) toURL(ctx context.Context, fromurl string) (string, error) {
-	log.Println("[info] usecase receipt tourl", fromurl)
-	f, err := r.repo.Get(ctx, fromurl)
+func (r *Receipt) copyDst(ctx context.Context, src string) (string, error) {
+	log.Println("[info] usecase receipt dst", src)
+	f, err := r.repo.Get(ctx, src)
 	if err != nil {
 		return "", err
 	}
