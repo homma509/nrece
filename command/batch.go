@@ -32,6 +32,9 @@ func (c *BatchCommand) Run(args []string) int {
 	log.Println("[info] batch run")
 	log.Println("[info] batch args", args)
 
+	log.Println("[info] batch event bucket", os.Getenv("EVENT_BUCKET"))
+	log.Println("[info] batch event object key", os.Getenv("EVENT_OBJECT_KEY"))
+
 	for _, pair := range os.Environ() {
 		fmt.Println(pair)
 	}

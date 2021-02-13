@@ -128,7 +128,11 @@ func (h *S3Repository) Publish(ctx context.Context, dst string) error {
 				Name: aws.String(config.Env().Container()),
 				Environment: []*ecs.KeyValuePair{
 					{
-						Name:  aws.String(dstURL.Host),
+						Name:  aws.String("EVENT_BUCKET"),
+						Value: aws.String(dstURL.Host),
+					},
+					{
+						Name:  aws.String("EVENT_OBJECT_KEY"),
 						Value: aws.String(dstURL.Path),
 					},
 				},
