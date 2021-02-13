@@ -41,7 +41,7 @@ func NewReceipt(repo repository.ReceiptRepository) *Receipt {
 	}
 }
 
-// Copy レセプトファイルのコピー
+// Copy レセプトファイルのコピーし、コピーされたことを通知
 func (r *Receipt) Copy(ctx context.Context, src string) error {
 	log.Println("[info] usecase receipt copy", src)
 	dst, err := r.copyDst(ctx, src)
@@ -49,7 +49,17 @@ func (r *Receipt) Copy(ctx context.Context, src string) error {
 		return err
 	}
 
-	return r.repo.Copy(ctx, dst, src)
+	err = r.repo.Copy(ctx, dst, src)
+	if err != nil {
+		return err
+	}
+
+	err = r.repo.Publish(ctx, dst)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *Receipt) copyDst(ctx context.Context, src string) (string, error) {

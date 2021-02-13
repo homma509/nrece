@@ -11,6 +11,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/session"
+	"github.com/aws/aws-sdk-go/service/ecs"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/homma509/nrece/config"
 )
@@ -99,5 +100,51 @@ func (h *S3Repository) Copy(ctx context.Context, dst, src string) error {
 		log.Println("[error] infra s3 copy", err)
 		return err
 	}
+	return nil
+}
+
+// Publish ...
+func (h *S3Repository) Publish(ctx context.Context, dst string) error {
+	log.Println("[info] infra s3 publish", dst)
+	dstURL, err := url.Parse(dst)
+	if err != nil {
+		return err
+	}
+
+	in := &ecs.RunTaskInput{
+		Cluster:        aws.String(config.Env().Cluster()),
+		TaskDefinition: aws.String(config.Env().TaskDefinition()),
+	}
+	in.NetworkConfiguration = &ecs.NetworkConfiguration{
+		AwsvpcConfiguration: &ecs.AwsVpcConfiguration{
+			Subnets:        aws.StringSlice(config.Env().Subnets()),
+			AssignPublicIp: aws.String("DISABLED"),
+		},
+	}
+	in.LaunchType = aws.String("FARGATE")
+	in.Overrides = &ecs.TaskOverride{
+		ContainerOverrides: []*ecs.ContainerOverride{
+			{
+				Name: aws.String(config.Env().Container()),
+				Environment: []*ecs.KeyValuePair{
+					{
+						Name:  aws.String(dstURL.Host),
+						Value: aws.String(dstURL.Path),
+					},
+				},
+			},
+		},
+	}
+
+	c := config.NewAWSConfig()
+	sess, err := session.NewSession(c)
+	svc := ecs.New(sess)
+
+	out, err := svc.RunTaskWithContext(ctx, in)
+	if err != nil {
+		return err
+	}
+
+	log.Println("[info] infra s3 publish success", out)
 	return nil
 }

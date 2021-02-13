@@ -2,6 +2,7 @@ package config
 
 import (
 	"os"
+	"strings"
 )
 
 var envs *Envs
@@ -59,4 +60,24 @@ func (e *Envs) BucketName() string {
 // BucketFolderName ...
 func (e *Envs) BucketFolderName() string {
 	return e.env("BUCKET_FOLDER_NAME")
+}
+
+// Cluster ...
+func (e *Envs) Cluster() string {
+	return e.env("ECS_CLUSTER")
+}
+
+// Container ...
+func (e *Envs) Container() string {
+	return e.env("ECS_CONTAINER")
+}
+
+// TaskDefinition ...
+func (e *Envs) TaskDefinition() string {
+	return e.env("ECS_TASK_DEFINITION")
+}
+
+// Subnets ...
+func (e *Envs) Subnets() []string {
+	return strings.Split(e.env("ECS_SUBNETS"), ",")
 }
