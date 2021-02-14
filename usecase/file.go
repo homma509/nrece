@@ -17,33 +17,21 @@ import (
 	"golang.org/x/text/transform"
 )
 
-// // ReceiptUsecase レセプトユースケースのインターフェース
-// type ReceiptUsecase interface {
-// 	Copy(ctx context.Context, s3URL string) error
-// 	Store(ctx context.Context, s3URL string) error
-// }
-
-// // ReceiptFile レセプトファイルのインターフェース
-// type ReceiptFile interface {
-// 	GetObject(bucket, key string) (io.ReadCloser, error)
-// 	CopyObject(srcBucket, srcKey, dstBucket, dstKey string) error
-// }
-
-// Receipt ...
-type Receipt struct {
-	repo repository.ReceiptRepository
+// File ...
+type File struct {
+	repo repository.FileRepository
 }
 
-// NewReceipt レセプトユースケースの生成
-func NewReceipt(repo repository.ReceiptRepository) *Receipt {
-	return &Receipt{
+// NewFile ファイルユースケースの生成
+func NewFile(repo repository.FileRepository) *File {
+	return &File{
 		repo,
 	}
 }
 
-// Copy レセプトファイルのコピーし、コピーされたことを通知
-func (r *Receipt) Copy(ctx context.Context, src string) error {
-	log.Println("[info] usecase receipt copy", src)
+// Copy ファイルをコピーし通知
+func (r *File) Copy(ctx context.Context, src string) error {
+	log.Println("[info] usecase file copy", src)
 	dst, err := r.copyDst(ctx, src)
 	if err != nil {
 		return err
@@ -62,8 +50,8 @@ func (r *Receipt) Copy(ctx context.Context, src string) error {
 	return nil
 }
 
-func (r *Receipt) copyDst(ctx context.Context, src string) (string, error) {
-	log.Println("[info] usecase receipt dst", src)
+func (r *File) copyDst(ctx context.Context, src string) (string, error) {
+	log.Println("[info] usecase file dst", src)
 	f, err := r.repo.Get(ctx, src)
 	if err != nil {
 		return "", err
@@ -97,7 +85,7 @@ func readIR(f io.ReadCloser) (*model.IR, error) {
 
 	record, err := r.Read()
 	if err == io.EOF {
-		return nil, errors.New("receipt file is empty")
+		return nil, errors.New("file is empty")
 	}
 	if err != nil {
 		return nil, err
@@ -107,7 +95,7 @@ func readIR(f io.ReadCloser) (*model.IR, error) {
 }
 
 func ir(record []string) (*model.IR, error) {
-	log.Println("[info] usecase receipt ir", record)
+	log.Println("[info] usecase file ir", record)
 	if record[0] != model.IRRecordType {
 		return nil, fmt.Errorf("ir RecordType invalid value %s", record[0])
 	}

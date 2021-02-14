@@ -12,6 +12,8 @@ import (
 	"github.com/homma509/nrece/command"
 	"github.com/homma509/nrece/handler"
 	"github.com/homma509/nrece/infra"
+	"github.com/homma509/nrece/infra/db"
+	"github.com/homma509/nrece/infra/file"
 	"github.com/mitchellh/cli"
 )
 
@@ -39,7 +41,7 @@ func lambdaHandler(ctx context.Context, evt events.S3Event) error {
 		}
 		log.Println("[info] main lambda handler", u.String())
 
-		s3Repo, err := infra.NewS3Repository()
+		s3Repo, err := file.NewS3Repository()
 		if err != nil {
 			log.Println("[error] main new s3 hander", err)
 			return err
@@ -65,7 +67,7 @@ func cmd() (int, error) {
 
 	c.Commands = map[string]cli.CommandFactory{
 		"server": func() (cli.Command, error) {
-			sql, err := infra.NewSQLHandler()
+			sql, err := db.NewSQLHandler()
 			if err != nil {
 				log.Println("[error] main server command", err)
 				// return nil, err
@@ -77,7 +79,7 @@ func cmd() (int, error) {
 			return &command.BatchCommand{}, nil
 		},
 		"lambda": func() (cli.Command, error) {
-			s3, err := infra.NewS3Repository()
+			s3, err := file.NewS3Repository()
 			if err != nil {
 				log.Println("[error] main lambda", err)
 				return nil, err

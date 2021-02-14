@@ -11,7 +11,7 @@ import (
 
 // LambdaCommand コマンドの定義
 type LambdaCommand struct {
-	ReceiptRepo repository.ReceiptRepository
+	ReceiptRepo repository.FileRepository
 }
 
 // Synopsis コマンドの簡単な説明

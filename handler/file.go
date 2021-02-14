@@ -9,13 +9,13 @@ import (
 
 // FileHandler ...
 type FileHandler struct {
-	u *usecase.Receipt
+	u *usecase.File
 }
 
 // NewFileHandler ...
-func NewFileHandler(repo repository.ReceiptRepository) (*FileHandler, error) {
+func NewFileHandler(repo repository.FileRepository) (*FileHandler, error) {
 	return &FileHandler{
-		usecase.NewReceipt(repo),
+		usecase.NewFile(repo),
 	}, nil
 }
 

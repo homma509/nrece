@@ -5,15 +5,16 @@ import (
 	"log"
 
 	"github.com/homma509/nrece/domain/model"
+	"github.com/homma509/nrece/infra/db"
 )
 
 // AppRepository ...
 type AppRepository struct {
-	sql *SQLHandler
+	sql *db.SQLHandler
 }
 
 // NewAppRepository ...
-func NewAppRepository(sqlHandler *SQLHandler) *AppRepository {
+func NewAppRepository(sqlHandler *db.SQLHandler) *AppRepository {
 	return &AppRepository{
 		sqlHandler,
 	}
