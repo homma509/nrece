@@ -8,11 +8,11 @@ import (
 	"io"
 	"log"
 	"net/url"
-	"strconv"
 
 	"github.com/homma509/nrece/config"
 	"github.com/homma509/nrece/domain/model"
 	"github.com/homma509/nrece/domain/repository"
+	"github.com/homma509/nrece/domain/value"
 	"golang.org/x/text/encoding/japanese"
 	"golang.org/x/text/transform"
 )
@@ -68,9 +68,9 @@ func (r *File) copyDst(ctx context.Context, src string) (string, error) {
 		Host:   config.Env().BucketName(),
 		Path: fmt.Sprintf("%s/%s/%s_%s.UKE",
 			config.Env().BucketFolderName(),
-			ir.FacilityID,
-			ir.FacilityName,
-			ir.InvoiceYM,
+			ir.FacilityID.String(),
+			ir.FacilityName.String(),
+			ir.InvoiceYearMonth.String(),
 		),
 	}
 
@@ -96,28 +96,78 @@ func readIR(f io.ReadCloser) (*model.IR, error) {
 
 func ir(record []string) (*model.IR, error) {
 	log.Println("[info] usecase file ir", record)
-	if record[0] != model.IRRecordType {
-		return nil, fmt.Errorf("ir RecordType invalid value %s", record[0])
-	}
-	payer, err := strconv.ParseUint(record[1], 10, 8)
+
+	// 0. レコード識別情報
+	recordType, err := value.NewRecordType(record[0])
 	if err != nil {
-		return nil, err
-	}
-	pointTable, err := strconv.ParseUint(record[3], 10, 8)
-	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("IR NewRecordType failed %v", err)
 	}
 
-	return &model.IR{
-		RecordType:    record[0],
-		Payer:         uint8(payer),
-		Prefecture:    record[2],
-		PointTable:    uint8(pointTable),
-		FacilityID:    record[4],
-		Reserve:       record[5],
-		FacilityName:  record[6],
-		InvoiceYM:     record[7],
-		MultiVolumeNo: record[8],
-		Phone:         record[9],
-	}, nil
+	// 1. 審査支払機関
+	payer, err := value.NewPayer(record[1])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewPayer failed %v", err)
+	}
+
+	// 2. 都道府県
+	prefecture, err := value.NewPrefecture(record[2])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewPrefecture failed %v", err)
+	}
+
+	// 3. 点数表
+	pointTable, err := value.NewPointTable(record[3])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewPointTable failed %v", err)
+	}
+
+	// 4. 医療機関コード
+	facilityID, err := value.NewFacilityID(record[4])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewFacilityID failed %v", err)
+	}
+
+	// 5. 予備
+	reserve, err := value.NewReserve(record[5])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewReserve failed %v", err)
+	}
+
+	// 6. 医療機関名称
+	facilityName, err := value.NewFacilityName(record[6])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewFacilityName failed %v", err)
+	}
+
+	// 7. 請求年月
+	invoiceYearMonth, err := value.NewYearMonth(record[7])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewYearMonth failed %v", err)
+	}
+
+	// 8. マルチボリューム識別情報
+	volumeID, err := value.NewVolumeID(record[8])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewVolumeID failed %v", err)
+	}
+
+	// 9. 電話番号
+	phone, err := value.NewPhone(record[9])
+	if err != nil {
+		return nil, fmt.Errorf("IR NewPhone failed %v", err)
+	}
+
+	return model.NewIR(
+		recordType,
+		payer,
+		prefecture,
+		pointTable,
+		facilityID,
+		facilityName,
+		invoiceYearMonth,
+		volumeID,
+		model.WithReserve(reserve),
+		model.WithPhone(phone),
+	)
+
 }
